@@ -4,43 +4,45 @@ import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 import {getUser} from '../actions/userAction';
 import {getNotes} from '../actions/notesAction';
+import Loading from '../components/Loading';
 
 class LoadingComponent extends Component {
     componentWillMount(){
         const {userLoading, notesLoading} = this.props;
         // if we havent tried to load the user, load user
         if(userLoading === undefined){
-            this.props.getUser()
+            this.props.getUser();
         }
 
         // if we havent tried to get notes, load notes
         if(notesLoading === undefined){
-            this.props.getNotes()
+            this.props.getNotes();
         }
     }
 
     componentWillReceiveProps(nextProps){
         // wait for user to get authenticated and try to load notes 
         if(nextProps.notesLoading === -1 && nextProps.user !== null){
-            this.props.getNotes()
+            this.props.getNotes();
         }
     }
 
     render(){
         const {userLoading, notesLoading, children} = this.props;
+        
         if((!userLoading && !notesLoading) || this.props.user === null){
-            return <div>{children}</div>
+            return <div>{children}</div>;
         }else{
-            return (<div><h2>Loading...</h2></div>);
+            return <Loading />;
         }
     }
 }
 
 function mapStateToProps(state){
-    return {
-        user: state.user,
+    return {        
         userLoading: state.loading.user,
-        notesLoading: state.loading.notes
+        notesLoading: state.loading.notes,
+        user: state.user
     };
 }
 

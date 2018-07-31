@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-//import {database} from '../firebase';
+
 import _ from 'lodash';
 import {connect} from 'react-redux';
 import {getNotes, saveNote, deleteNote} from '../actions/notesAction';
 import NoteCard from './NoteCard';
 import { getUser } from '../actions/userAction';
+import { Link } from 'react-router-dom';
 
 class App extends Component {
   constructor(props){
@@ -21,6 +22,7 @@ class App extends Component {
     this.renderNotes = this.renderNotes.bind(this);
   }
 
+  /*
   // lifecycle
   componentDidMount(){
     //database.on('value', snapshot => {
@@ -29,7 +31,7 @@ class App extends Component {
     
     this.props.getNotes();
     this.props.getUser();
-  }
+  }*/
 
   // handle change
   handleChange(e){
@@ -43,7 +45,8 @@ class App extends Component {
     e.preventDefault();
     const note={
       title: this.state.title,
-      body: this.state.body
+      body: this.state.body,
+      uid: this.props.user.uid
     };
     // database.push(note);
     this.props.saveNote(note);
@@ -59,19 +62,40 @@ class App extends Component {
     return _.map(this.props.notes, (note, key) => {
       return (
         <NoteCard key={key}>
+          <Link to={`/${key}`}>
           <h2>{note.title}</h2>
+          </Link>
           <p>{note.body}</p>
-          <button className="btn btn-danger btn-xs" onClick={()=>this.props.deleteNote(key)}>Delete</button>
+          {note.uid === this.props.user.uid && (<div>
+            <button className="btn btn-danger btn-xs" onClick={()=>this.props.deleteNote(key)}>
+              Delete
+            </button>
+            <button className="btn btn-info btn-xs pull-right">
+              <Link to={`/${key}/edit`}>Update</Link>
+            </button>
+            </div>
+          )}
+          
         </NoteCard>
       );
     });
   }
 
   render() {
+    console.log(this.props.user);
     return (
       <div className="container-fluid">
         <div className="row">
-          <div className="col-sm-6 col-sm-offset-3">
+          <div className="col-sm-2 text-center">
+            <img alt="" 
+              src={this.props.user.photoURL}
+              height="100px"
+              className="img img-responsive circle"
+              style={{ padding: '20px' }}
+            />
+            <h4 className="username">Welcome back {this.props.user.displayName}</h4>
+          </div>
+          <div className="col-sm-10">
             <form onSubmit={this.handleSubmit}>
               <div className="form-group">
                 <input onChange={this.handleChange} value={this.state.title} type="text" name="title" className="form-control no-border" placeholder="Title .." required />
@@ -83,6 +107,7 @@ class App extends Component {
                 <button className="btn btn-primary col-sm-12">Save</button>
               </div>
             </form>
+            <br />
             {this.renderNotes()}
           </div>
         </div>

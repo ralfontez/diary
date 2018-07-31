@@ -17,9 +17,9 @@ export function getUser() {
             dispatch({
                 type: USER_STATUS,
                 payload: false
-            })
-        })
-    }
+            });
+        });
+    };
 }
 
 export function googleLogin(){

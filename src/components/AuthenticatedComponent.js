@@ -21,13 +21,11 @@ class AuthenticatedComponent extends Component {
     }
 }
 
-
-
 function mapStateToProps(state){
     return {
-        user: state.user,
-        userLoading: state.loading.user
+        userLoading: state.loading.user,
+        user: state.user        
     };
 }
 
-export default withRouter(connect(mapStateToProps)(AuthenticatedComponent))
+export default withRouter(connect(mapStateToProps)(AuthenticatedComponent));

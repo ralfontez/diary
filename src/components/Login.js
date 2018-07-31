@@ -3,22 +3,34 @@ import {connect} from 'react-redux';
 import { googleLogin, twitterLogin } from '../actions/userAction';
 
 class Login extends Component {
+    componentWillMount(){
+        if(this.props.user !== null){
+            //console.log(this.props.history);
+            this.props.history.push('/');
+        }
+    }
+
+    componentWillReceiveProps(nextProps){
+        if(nextProps.user !== null){
+            nextProps.history.push('/');
+        }
+    }
+
     render(){
         return (
             <div className = "container-fluid">
-                <div className="row text-center">
+                <div className="row">
                     <div className="col-sm-12 jumbotron" style={{ marginTop: '0px' }}>
-                        <h1>Login with your favourite <b>Social Network</b></h1>
+                        <h1>DIARY | {new Date().getFullYear() }</h1>
+                        <h2><i>Login with your favourite <b>Social Network</b> to start writing</i></h2>
                     </div>
-
-                    <div className="col-sm-6">
-                        <button className="btn btn-danger btn-lg" onClick={this.props.googleLogin}>
+                </div>
+                <div className="row">
+                    <div className="col-sm-12">                        
+                        <button className="btn btn-danger col-sm-6" onClick={this.props.googleLogin}>
                             Login with Google
                         </button>
-                    </div>
-                    <br /> 
-                    <div className="col-sm-6">
-                        <button className="btn btn-success btn-lg" onClick={this.props.twitterLogin}>
+                        <button className="btn btn-info col-sm-6" onClick={this.props.twitterLogin}>
                             Login with Twitter
                         </button>
                     </div>
@@ -28,4 +40,11 @@ class Login extends Component {
     }
 }
 
-export default connect(null, { googleLogin, twitterLogin })(Login);
+function mapStateToProps(state, ownProps) {
+    return {
+        user: state.user
+    }
+}
+
+export default connect(mapStateToProps, { googleLogin, twitterLogin })(Login);
+
