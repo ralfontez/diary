@@ -6,15 +6,13 @@ import { getUser, logout } from '../actions/userAction';
 class Header extends Component {
     render(){
         return(
-            <nav className="navbar navbar-light bg-light">                    
+            <nav className="navbar navbar-expand-sm navbar-dark bg-dark">                      
                 <Link className="navbar-brand" to="/" >DIARY2018</Link>
-                
                 <button type="button" className="navbar-toggler" data-toggle="collapse" data-target="#myNavbar">
                     <span className="navbar-toggler-icon"></span>                
                 </button> 
-                
                 <div className="collapse navbar-collapse" id="myNavbar">
-                    <ul className="nav navbar-nav">
+                    <ul className="nav navbar-nav ml-auto">
                         {this.props.user === null?(
                             <li className="nav-item">
                             <Link className="nav-link" to="/Login">Login</Link>
@@ -23,9 +21,9 @@ class Header extends Component {
                             <li className="nav-item">
                             <Link className="nav-link" to="/logout" onClick={() => this.props.logout()}>Logout</Link>
                             </li>
-                        )}                            
+                        )}                           
                     </ul>
-                </div>
+                </div>            
             </nav>
         );
     }
